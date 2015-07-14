@@ -4,7 +4,11 @@ import java.util.ArrayList;
 
 import controlador.Objeto;
 import controlador.Ser;
-
+/**
+ * Clase que sirve para moverse sobre el mundo y recorrerlo para ver a todos los seres
+ * @author Oz
+ *
+ */
 public class Camara {
 	private int ancho, alto, posx, posy, alto_mundo, ancho_mundo, vex, vey;
 	private Ser actor;
@@ -39,12 +43,11 @@ public class Camara {
 	public void mover(int movex, int movey) {
 		this.vex = movex;
 		this.vey = movey;
-		// this.posx += movex;
-		// this.posy += movey;
 		verificar();
-		// System.out.println(posx+" - "+posy);
 	}
-
+/**
+ * Check que no se salga del mundo.
+ */
 	private void verificar() {
 		if (this.posx + this.ancho > this.ancho_mundo) {
 			this.posx = this.ancho_mundo - this.ancho;// this.ancho_mundo-this.ancho;
@@ -79,12 +82,9 @@ public class Camara {
 	public void actualizar() {
 		// TODO Auto-generated method stub
 		if (actor != null) {
-			// if ( Math.abs(posx - ((int)actor.getX()-ancho/2) ) > ancho/10)
 			this.posx = (int) actor.getX() - ancho / 2;
-			// if ( Math.abs(posy -((int)actor.getY()-alto/2) ) > alto/10)
 			this.posy = (int) actor.getY() - alto / 2;
 			if (!actor.estaVivo()) {
-				System.out.println("Siguiendo a un muerto");
 				actor = null;
 			}
 		} else {
@@ -96,9 +96,6 @@ public class Camara {
 			this.posy += vey;
 			vex = 0;
 			vey = 0;
-			/*
-			 * if (vex > 0) vex--; else if (vex < 0) vex++; if (vey > 0) vey--; else if (vey < 0) vey++;
-			 */
 			verificar();
 		}
 	}

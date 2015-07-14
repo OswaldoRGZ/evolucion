@@ -20,22 +20,16 @@ import modelo.Cementerio;
 import controlador.Ser;
 
 public class Menu extends JFrame {
-
-	/**
-     * 
-     */
 	private static final long serialVersionUID = 3092820725324053647L;
 	private JPanel contentPane;
 	private DefaultListModel<String> lista;
 	private Simulador visual, rapido;
 	private Cementerio cementerio;
-	private JTextField textAlto;
-	private JTextField textAncho;
 	private JTextField textPromClon;
 	private JTextField textMaxSeres;
 
 	/**
-	 * Launch the application.
+	 * INICIO APLICACION
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -113,11 +107,11 @@ public class Menu extends JFrame {
 
 		JLabel lblInformacion = new JLabel("Informacion");
 		lblInformacion.setFont(new Font("Arial", Font.PLAIN, 12));
-		lblInformacion.setBounds(10, 93, 180, 14);
+		lblInformacion.setBounds(10, 70, 180, 14);
 		contentPane.add(lblInformacion);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 118, 519, 156);
+		scrollPane.setBounds(10, 93, 519, 181);
 		contentPane.add(scrollPane);
 
 		JList<String> listHistoria = new JList<String>();
@@ -125,48 +119,26 @@ public class Menu extends JFrame {
 		lista = new DefaultListModel<String>();
 		listHistoria.setModel(lista);
 
-		JLabel lblAlto = new JLabel("Alto");
-		lblAlto.setFont(new Font("Arial", Font.PLAIN, 12));
-		lblAlto.setBounds(10, 43, 74, 14);
-		contentPane.add(lblAlto);
-
-		JLabel lblAncho = new JLabel("Ancho");
-		lblAncho.setFont(new Font("Arial", Font.PLAIN, 12));
-		lblAncho.setBounds(10, 68, 74, 14);
-		contentPane.add(lblAncho);
-
-		textAlto = new JTextField();
-		textAlto.setText("2000");
-		textAlto.setBounds(88, 38, 86, 20);
-		contentPane.add(textAlto);
-		textAlto.setColumns(10);
-
-		textAncho = new JTextField();
-		textAncho.setText("2000");
-		textAncho.setBounds(88, 66, 86, 20);
-		contentPane.add(textAncho);
-		textAncho.setColumns(10);
-
 		JLabel lblPromedioParaClonar = new JLabel("Promedio para clonar");
 		lblPromedioParaClonar.setFont(new Font("Arial", Font.PLAIN, 12));
-		lblPromedioParaClonar.setBounds(199, 41, 129, 14);
+		lblPromedioParaClonar.setBounds(295, 41, 129, 14);
 		contentPane.add(lblPromedioParaClonar);
 
 		textPromClon = new JTextField();
 		textPromClon.setText("5");
-		textPromClon.setBounds(338, 37, 86, 20);
+		textPromClon.setBounds(443, 39, 86, 20);
 		contentPane.add(textPromClon);
 		textPromClon.setColumns(10);
 
 		textMaxSeres = new JTextField();
-		textMaxSeres.setText("45");
+		textMaxSeres.setText("30");
 		textMaxSeres.setColumns(10);
-		textMaxSeres.setBounds(338, 66, 86, 20);
+		textMaxSeres.setBounds(150, 39, 86, 20);
 		contentPane.add(textMaxSeres);
 
 		JLabel lblMaxSeresinfinito = new JLabel("Max Seres(0:infinito)");
 		lblMaxSeresinfinito.setFont(new Font("Arial", Font.PLAIN, 12));
-		lblMaxSeresinfinito.setBounds(199, 68, 123, 14);
+		lblMaxSeresinfinito.setBounds(10, 41, 123, 14);
 		contentPane.add(lblMaxSeresinfinito);
 
 		lista.addElement("Inicio todo...");
@@ -192,8 +164,11 @@ public class Menu extends JFrame {
 
 	private void aplicarParametros() {
 		if (this.rapido != null) {
-			this.rapido.getJuego().setValores(Integer.valueOf(textAlto.getText()), Integer.valueOf(textAncho.getText()), Integer.valueOf(textMaxSeres.getText()));
-			this.visual.getJuego().setValores(Integer.valueOf(textAlto.getText()), Integer.valueOf(textAncho.getText()), Integer.valueOf(textMaxSeres.getText()));
+			int seres = Integer.valueOf(textMaxSeres.getText());
+			int alto = seres * 100;
+			int ancho = seres * 100;
+			this.rapido.getJuego().setValores(alto, ancho, seres);
+			this.visual.getJuego().setValores(alto, ancho, seres);
 		}
 	}
 

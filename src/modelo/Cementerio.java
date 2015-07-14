@@ -15,7 +15,7 @@ import controlador.RNA;
 import controlador.Ser;
 
 public class Cementerio extends Thread {
-	private final int PERIODO_TRABAJO = 10000;// cada 10s verifica si puede hacer recolecta de cuerpos
+	private final int PERIODO_TRABAJO = 30000;// cada 30s verifica si puede hacer recolecta de cuerpos
 	private final String RUTA = "rnas/";
 
 	private ArrayList<Ser> principal, secundario;
@@ -182,8 +182,8 @@ public class Cementerio extends Thread {
 				Ser nuevo = new Ser(0, 0, cerebro);
 				seres.add(nuevo);
 				ois.close();
-				File archivo = new File(fich);
-				archivo.delete();
+				// File archivo = new File(fich);
+				// archivo.delete();
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

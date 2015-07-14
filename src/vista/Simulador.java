@@ -12,17 +12,17 @@ import javax.swing.JFrame;
 import modelo.Cementerio;
 import controlador.Mundo;
 import entrada.EntradaUsuario;
-
+/**
+ * Clase que une el Mundo, Hilos, Entrada desde usuario y es lanzado desde el Main del programa (Menu.java)
+ * @author Oz
+ *
+ */
 public class Simulador extends Canvas implements Runnable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 7498342999599172958L;
 	public static final int ANCHO = Toolkit.getDefaultToolkit().getScreenSize().width;
 	public static final int ALTO = Toolkit.getDefaultToolkit().getScreenSize().height - 40;
 
-	// Toolkit.getDefaultToolkit().getScreenSize()
 	private Mundo juego;
 	private Camara camara;
 	private Thread hilo;
@@ -32,7 +32,8 @@ public class Simulador extends Canvas implements Runnable {
 	private JFrame frame;
 
 	/**
-	 * @param args
+	 * Constructor, recibe parametro que determina si se trata de un HILO para visualizar o un HILO para simular rapido.
+	 * @param rapido
 	 */
 	Simulador(boolean rapido) {
 		if (rapido) {
@@ -53,10 +54,6 @@ public class Simulador extends Canvas implements Runnable {
 			addMouseMotionListener(entrada);
 		}
 	}
-
-	/*
-	 * private void agregarContrincantes() { RNA cerebro = null; this.juego.agregarSer(cerebro); }
-	 */
 
 	public void setCementerio(Cementerio c) {
 		juego.setCementerio(c);
@@ -175,7 +172,6 @@ public class Simulador extends Canvas implements Runnable {
 		mostrar = false;
 		if (frame == null)
 			return;
-		// frame.setVisible(false);
 	}
 
 	public Mundo getJuego() {

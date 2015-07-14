@@ -41,7 +41,6 @@ public class Ser extends Objeto implements Serializable {
 	private Color color;
 	private boolean elegido;
 
-	private String adn;
 
 	public Ser() {
 		super(0, 0, true);
@@ -64,7 +63,15 @@ public class Ser extends Objeto implements Serializable {
 		super(ancho, alto, true);
 		valoresIniciales(padre, null);
 	}
-
+	/**
+	 * Simple copia de ser vivo con cerebro de otro ser.
+	 * 
+	 * @param cerebro
+	 */
+	public Ser(RNA cerebro) {
+		super(0, 0, true);
+		valoresIniciales(null, null);
+	}
 	/**
 	 * Crea ser nuevo independiente con copia independiente de cerebro
 	 * 
@@ -85,7 +92,6 @@ public class Ser extends Objeto implements Serializable {
 	}
 
 	private void valoresIniciales(Ser padre, Ser madre) {
-		this.adn = "";
 		this.mutaciones = 0;
 		this.golpeve = 0;
 		this.golpevx = 0;
@@ -117,17 +123,15 @@ public class Ser extends Objeto implements Serializable {
 				System.out.println("Color fuera de limites");
 				break;
 			}
-			this.adn += this.getTipo();
 		} else {
 			if (madre == null) {
-				// copia exacta del cerebro del padre
+				// copia exacta del cerebro del padre, independiente
 				this.cerebro = new RNA(padre.cerebro);
 				do {
 					this.cerebro.mutar();
 					this.mutaciones++;
 				} while (Math.random() < 0.2);
 				heredarRasgos(padre);
-				this.adn += "|" + padre.getTipo() + "-" + this.mutaciones;
 			} else {
 				// crea un cruce de los cerebros de padre y madre
 				this.cerebro = new RNA(padre.cerebro, madre.cerebro);
@@ -140,7 +144,6 @@ public class Ser extends Objeto implements Serializable {
 				} else {
 					heredarRasgos(padre);
 				}
-				this.adn += "|" + padre.getTipo() + "+" + madre.getTipo() + "-" + this.mutaciones;
 			}
 		}
 		// el color depende de las caracterizticas del ser.
@@ -149,9 +152,6 @@ public class Ser extends Objeto implements Serializable {
 		} catch (Exception el) {
 			System.out.println(rojo + " " + verde + " " + azul);
 			this.color = new Color(255, 255, 255);
-		}
-		if (this.adn.length() > 500) {
-			this.adn = "...";
 		}
 	}
 
@@ -525,7 +525,5 @@ public class Ser extends Objeto implements Serializable {
 		return this.mutaciones;
 	}
 
-	public String getAdn() {
-		return this.adn;
-	}
+
 }
