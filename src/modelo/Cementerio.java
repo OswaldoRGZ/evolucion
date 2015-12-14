@@ -69,14 +69,14 @@ public class Cementerio extends Thread {
 	@Override
 	public void run() {
 		while (trbajar) {
-			System.out.println("Esperando un buen tamano de seres " + (principal.size() + secundario.size()));
+			// System.out.println("Esperando un buen tamano de seres " + (principal.size() + secundario.size()));
 			while (principal.size() + secundario.size() < 100)
 				try {
 					Thread.sleep(PERIODO_TRABAJO);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-			System.out.println("A trabajar " + (principal.size() + secundario.size()));
+			// System.out.println("A trabajar " + (principal.size() + secundario.size()));
 			conteo = 0;
 			if (principal_ocupado) {
 				principal_ocupado = false;

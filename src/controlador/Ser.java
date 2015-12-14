@@ -41,7 +41,6 @@ public class Ser extends Objeto implements Serializable {
 	private Color color;
 	private boolean elegido;
 
-
 	public Ser() {
 		super(0, 0, true);
 		valoresIniciales(null, null);
@@ -110,18 +109,18 @@ public class Ser extends Objeto implements Serializable {
 		if (padre == null && madre == null) {
 			this.cerebro = new RNA(ENTRADAS_RNA, SALIDAS_RNA);
 			switch ((int) (Math.random() * 3)) {
-			case 0:
-				rojo = 250;
-				break;
-			case 1:
-				verde = 250;
-				break;
-			case 2:
-				azul = 250;
-				break;
-			default:
-				System.out.println("Color fuera de limites");
-				break;
+				case 0 :
+					rojo = 250;
+					break;
+				case 1 :
+					verde = 250;
+					break;
+				case 2 :
+					azul = 250;
+					break;
+				default :
+					System.out.println("Color fuera de limites");
+					break;
 			}
 		} else {
 			if (madre == null) {
@@ -216,17 +215,14 @@ public class Ser extends Objeto implements Serializable {
 		 *************************/
 		// la magia del cine
 		float[] salidas = cerebro.reconocer(entradas);
-		for (int i = 0; i < salidas.length; i++) {
-			salidas[i] -= 0.5f;
-			if (salidas[i] <= 0) {// realmente es una desicion o no
-				salidas[i] = 0;
-			}
-		}
+		/*
+		 * for (int i = 0; i < salidas.length; i++) { salidas[i] -= 0.5f; if (salidas[i] <= 0) {// realmente es una desicion o no salidas[i] = 0; } }
+		 */
 		// fin de la magia del cine
 		this.ruedas = new float[2];
 		ruedas[0] = salidas[0];
 		ruedas[1] = salidas[1];
-		aceleracion = salidas[2] * 2;
+		aceleracion = salidas[2];
 	}
 
 	public float[] getPunta() {
@@ -247,7 +243,7 @@ public class Ser extends Objeto implements Serializable {
 			g.drawLine((int) getX(), (int) getY(), (int) (getX() + Math.cos(getAngulo()) * DIAMETRO), (int) (getY() + Math.sin(getAngulo()) * DIAMETRO));
 			// dibujamos la vida:
 			// g.drawLine((int) getX() - RADIO, (int) getY() - DIAMETRO, (int) (getX() - RADIO + DIAMETRO * vida / VIDA_MAX), (int) getY() - DIAMETRO);
-			g.drawString(vida + "", (int) getX() - DIAMETRO, (int) getY() - DIAMETRO);// + hambre
+			// g.drawString(vida + "", (int) getX() - DIAMETRO, (int) getY() - DIAMETRO);// + hambre
 			// dibujamos el habmre
 			g.drawString(puntos + "", (int) getX() - DIAMETRO, (int) getY() + DIAMETRO);// + aceleracion + ""
 			if (elegido) {// a sido seleccionado, le mostramos todos los ojos
@@ -258,7 +254,8 @@ public class Ser extends Objeto implements Serializable {
 						if (this.sensores[i][0] != 0) {
 							g.setColor(new Color(this.sensores[i][1], this.sensores[i][2], this.sensores[i][3]));
 							float fact = 1 - this.sensores[i][0];
-							Line2D l = new Line2D.Float(this.getX(), this.getY(), (float) (this.getX() + (ojos.get(i).getX2() - ojos.get(i).getX1()) * fact), (float) (this.getY() + (ojos.get(i).getY2() - ojos.get(i).getY1()) * fact));
+							Line2D l = new Line2D.Float(this.getX(), this.getY(), (float) (this.getX() + (ojos.get(i).getX2() - ojos.get(i).getX1()) * fact),
+									(float) (this.getY() + (ojos.get(i).getY2() - ojos.get(i).getY1()) * fact));
 							g.draw(l);
 						} else {
 							g.setColor(new Color(150, 150, 150));
@@ -269,8 +266,9 @@ public class Ser extends Objeto implements Serializable {
 				 * g.draw(ojos.get(0)); g.draw(ojos.get(ojos.size() - 1));
 				 */
 				/*
-				 * fronteras.clear(); fronteras.add(new Line2D.Float(getX(), getY(), 0, getY())); fronteras.add(new Line2D.Float(getX(), getY(), getX(), 0)); fronteras.add(new Line2D.Float(getX(), getY(), ancho_mundo, getY())); fronteras.add(new Line2D.Float(getX(), getY(), getX(), alto_mundo)); for (Line2D l :
-				 * fronteras) { g.draw(l); }
+				 * fronteras.clear(); fronteras.add(new Line2D.Float(getX(), getY(), 0, getY())); fronteras.add(new Line2D.Float(getX(), getY(), getX(), 0)); fronteras.add(new
+				 * Line2D.Float(getX(), getY(), ancho_mundo, getY())); fronteras.add(new Line2D.Float(getX(), getY(), getX(), alto_mundo)); for (Line2D l : fronteras) { g.draw(l);
+				 * }
 				 */
 			}
 		} else {
@@ -325,7 +323,6 @@ public class Ser extends Objeto implements Serializable {
 			hambre = 0.1f + hambre * 1.1f;
 			if (hambre > MAX_HAMBRE) {
 				vida -= 1;
-				puntos -= 1;
 				hambre = MAX_HAMBRE;
 			}
 		}
@@ -351,8 +348,8 @@ public class Ser extends Objeto implements Serializable {
 		float separador = 0.05f;
 		float inf = (float) ((CANT_OJOS - 1) * separador / 2);
 		for (int i = 0; i < CANT_OJOS; i++) {
-			Line2D l = new Line2D.Float((float) (getX() + Math.cos(getAngulo() - inf + i * separador) * RADIO), (float) (getY() + Math.sin(getAngulo() - inf + i * separador) * RADIO), (float) (getX() + Math.cos(getAngulo() - inf + i * separador) * getVision()), (float) (getY() + Math.sin(getAngulo() - inf + i
-					* separador)
+			Line2D l = new Line2D.Float((float) (getX() + Math.cos(getAngulo() - inf + i * separador) * RADIO), (float) (getY() + Math.sin(getAngulo() - inf + i * separador)
+					* RADIO), (float) (getX() + Math.cos(getAngulo() - inf + i * separador) * getVision()), (float) (getY() + Math.sin(getAngulo() - inf + i * separador)
 					* getVision()));
 			ojos.add(l);
 		}
@@ -424,7 +421,6 @@ public class Ser extends Objeto implements Serializable {
 	}
 
 	public void resetPuntos() {
-		// TODO Auto-generated method stub
 		this.puntos = 0;
 	}
 
@@ -470,19 +466,19 @@ public class Ser extends Objeto implements Serializable {
 		this.verde = 0;
 		this.azul = 0;
 		switch (v) {
-		case 0:
-			this.rojo = 250;
-			break;
-		case 1:
-			this.verde = 250;
-			break;
-		case 2:
-			this.azul = 250;
-			break;
-		default:
-			System.out.println("Tipo incorrecto");
-			System.exit(0);
-			break;
+			case 0 :
+				this.rojo = 250;
+				break;
+			case 1 :
+				this.verde = 250;
+				break;
+			case 2 :
+				this.azul = 250;
+				break;
+			default :
+				System.out.println("Tipo incorrecto");
+				System.exit(0);
+				break;
 		}
 		this.color = new Color(rojo, verde, azul);
 	}
@@ -499,10 +495,9 @@ public class Ser extends Objeto implements Serializable {
 		this.fit = this.puntos > this.fit ? this.puntos : this.fit;
 	}
 
-	public int getFit() {
-		// TODO Auto-generated method stub
-		return this.fit;
-	}
+	/*
+	 * public int getFit() { // TODO Auto-generated method stub return this.fit; }
+	 */
 
 	public boolean estaQuieto() {
 		// TODO Auto-generated method stub
@@ -524,6 +519,5 @@ public class Ser extends Objeto implements Serializable {
 	public int getMutaciones() {
 		return this.mutaciones;
 	}
-
 
 }
