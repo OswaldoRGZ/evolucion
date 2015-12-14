@@ -125,7 +125,6 @@ public class Mundo implements ArquitecturaJuego {
 	 */
 	@Override
 	public void actualizar() {
-		// TODO Auto-generated method stub
 		int tmpvivos = 0;
 		int[] especies = new int[3];// contiene la cantidad de vivos por cada especie
 		colisiones();
@@ -144,6 +143,14 @@ public class Mundo implements ArquitecturaJuego {
 				especies[s.getTipo()]++;
 			}
 		}
+		/* * agregar seres creados externamente */
+		for (int i = externos.size() - 1; i >= 0; i--) {
+			seres.add(externos.get(i));
+			externos.remove(i);
+			tmpvivos++;
+			if (tmpvivos > SERES_MAX)
+				break;
+		}
 		/* * Miramos si existe un espacio para crear un hijo */
 		if (tmpvivos < SERES_MAX) {
 			if (rapido != null) {
@@ -154,18 +161,9 @@ public class Mundo implements ArquitecturaJuego {
 				regenera_simulador(especies);
 			}
 		}
-		/* * agregar seres creados externamente */
-		for (int i = externos.size() - 1; i >= 0; i--) {
-			if (tmpvivos > SERES_MAX)
-				break;
-			seres.add(externos.get(i));
-			externos.remove(i);
-			tmpvivos++;
-		}
 		vivos = tmpvivos;
 	}
 	private void regenera_simulador(int[] especies) {
-		// TODO Auto-generated method stub
 		Ser mejor = null;
 		int max = 0;
 		float prom = 0;
@@ -179,19 +177,19 @@ public class Mundo implements ArquitecturaJuego {
 		}
 		prom = prom / seres.size();
 		if (mejor != null) {
-			puntos_max = max;
 			// vamos a crear copia exacta del mejor, INDEPENDIETNE
-			Ser copiaMejor = new Ser(mejor.getCerebro());
-			copiaMejor.setPuntaje(mejor.getPuntos() + mejor.getFit());// puntaje absoluto obtenido
+			Ser copiaMejor1 = new Ser(mejor.getCerebro());
+			Ser copiaMejor2 = new Ser(mejor.getCerebro());
 			// lo guardamos para historial y cruces, asi este vivo
-			this.cement.addMejor(copiaMejor);
-			this.cruza.add(copiaMejor);
-			// reiniciamos y guardamos los puntajes del mejor
-			mejor.setFit();
-			mejor.resetPuntos();
+			copiaMejor1.setPuntaje(mejor.getPuntos());
+			copiaMejor2.setPuntaje(mejor.getPuntos());
+			this.cement.addMejor(copiaMejor1);
+			this.cruza.add(copiaMejor2);
 			// crea un ser mutado del padre, pero con el mismo tipo, independiente
 			Ser nuevo = new Ser(ANCHO, ALTO, mejor);
 			nuevos.add(nuevo);
+			// reiniciamos y guardamos los puntajes del mejor
+			mejor.resetPuntos();
 		}
 		// Ahora mantener la minima cantidad de seres de cada especie
 		for (int j = 0; j < especies.length; j++) {
@@ -222,6 +220,8 @@ public class Mundo implements ArquitecturaJuego {
 		}
 		if (imaxcru1 > -1 && imaxcru2 > -1) {
 			Ser nuevo = new Ser(ANCHO, ALTO, cruza.get(imaxcru1), cruza.get(imaxcru2));
+			cruza.get(imaxcru1).setPuntaje(cruza.get(imaxcru1).getPuntos() / 2);
+			cruza.get(imaxcru2).setPuntaje(cruza.get(imaxcru2).getPuntos() / 2);
 			nuevos.add(nuevo);
 		}
 		// agregarlos al mundo
@@ -230,12 +230,12 @@ public class Mundo implements ArquitecturaJuego {
 		}
 		// eliminar de memoria algunos de los peores muertos
 		for (int i = seres.size() - 1; i >= 0; i--) {
-			if (!seres.get(i).estaVivo() && seres.get(i).getPuntos() < prom * 1.4)
+			if (!seres.get(i).estaVivo() && seres.get(i).getPuntos() < prom)
 				seres.remove(i);
 		}
 		// eliminar los cruzados con poco puntos
 		for (int i = cruza.size() - 1; i >= 0; i--) {
-			if (cruza.get(i).getPuntos() < prom * 1.4) {
+			if (cruza.get(i).getPuntos() < prom) {
 				cruza.remove(i);
 			}
 
@@ -243,7 +243,6 @@ public class Mundo implements ArquitecturaJuego {
 	}
 
 	private void regenera_visualizador(int[] especies) {
-		// TODO Auto-generated method stub
 		// eliminar los cadaveres...
 		while (seres.size() > SERES_MAX + 20) {
 			for (Ser serele : seres) {
@@ -256,6 +255,7 @@ public class Mundo implements ArquitecturaJuego {
 		// consultar el mejor del momento
 		Ser ser = rapido.getMejor();
 		if (ser != null) {
+			puntos_max = ser.getPuntos();
 			seres.add(ser);
 			// copiar el mejor para las especies con menos seres
 			for (int j = 0; j < especies.length; j++) {
@@ -387,7 +387,6 @@ public class Mundo implements ArquitecturaJuego {
 	 * Retorna raiz ( (s1.x-s2.x)^2 + (s1.y-s2.y)^2 )
 	 */
 	private float distancia(Objeto s1, Objeto s2) {
-
 		return (float) (Math.sqrt(Math.pow(s1.getX() - s2.getX(), 2) + Math.pow(s1.getY() - s2.getY(), 2)));
 	}
 
@@ -395,7 +394,6 @@ public class Mundo implements ArquitecturaJuego {
 	 * Retorna raiz ( (s1.x-s2.x)^2 + (s1.y-s2.y)^2 )
 	 */
 	private float distancia(float x1, float x2, float y1, float y2) {
-
 		return (float) (Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2)));
 	}
 
@@ -411,15 +409,16 @@ public class Mundo implements ArquitecturaJuego {
 		Ser mejor = null;
 		int max = 0;
 		// se tienen en cuenta los muertos
-		for (int i = seres.size() - 1; i >= 0; i--) {
-			if (seres.get(i).getPuntos() + seres.get(i).getFit() > max) {
-				mejor = seres.get(i);
-				max = seres.get(i).getPuntos() + seres.get(i).getFit();
+		for (int i = cruza.size() - 1; i >= 0; i--) {
+			if (cruza.get(i).getPuntos() > max) {
+				mejor = cruza.get(i);
+				max = cruza.get(i).getPuntos();
 			}
 		}
 		if (mejor != null) {
 			// ennviar una copia del ser, no el mejor como tal
 			Ser nuevo = new Ser(ANCHO, ALTO, mejor.getCerebro());
+			nuevo.setPuntaje(max);
 			return nuevo;
 		}
 		return null;
