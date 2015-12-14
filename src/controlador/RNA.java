@@ -22,7 +22,7 @@ public class RNA implements Serializable {
 		this.entradas = cant_entradas;
 		this.salidas = cant_salidas;
 		this.ocultas = (int) (Math.random() * (cant_entradas + cant_salidas) / 2);
-		this.rango_azar = 1 + (int) (Math.random() * 10);
+		this.rango_azar = (int) (Math.random() * 10);
 		this.funcion = (int) (Math.random() * MAX_FUNCIONES);// FSIG;
 		// aparte
 		this.coef = 0.5f;
