@@ -20,6 +20,7 @@ import modelo.Cementerio;
 import controlador.Ser;
 
 public class Menu extends JFrame {
+
 	private static final long serialVersionUID = 3092820725324053647L;
 	private JPanel contentPane;
 	private DefaultListModel<String> lista;
@@ -27,22 +28,6 @@ public class Menu extends JFrame {
 	private Cementerio cementerio;
 	private JTextField textPromClon;
 	private JTextField textMaxSeres;
-
-	/**
-	 * INICIO APLICACION
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Menu frame = new Menu();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
@@ -149,8 +134,9 @@ public class Menu extends JFrame {
 	}
 
 	private void iniciarSimulacion() {
-		if (this.rapido != null)
+		if (this.rapido != null) {
 			return;
+		}
 		this.cementerio.setRegistro(lista);
 
 		this.rapido = new Simulador(true);
